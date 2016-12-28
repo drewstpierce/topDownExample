@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<meta charset="utf-8"/>
+	<title>New</title>
+        
+        <script src ="js/libs/phaser/phaser.js"></script>
+        
+        <script src ="js/Boot.js"></script>
+        <script src ="js/Preloader.js"></script>
+        <script src ="js/MainMenu.js"></script>
+        <script src ="js/Level1.js"></script>
+        <script src ="js/Player.js"></script>
+        <script src ="js/Enemy.js"></script>
+        <script src ="js/Damage.js"></script>
+     
+	      
+</head>
+<body>
+    <script type ="text/javascript">
+        window.onload = function() {
+            
+            var game = new Phaser.Game(384, 192, Phaser.CANVAS, '');
+            
+            
+            game.state.add('Boot', Game.Boot);
+            game.state.add('Preloader', Game.Preloader);
+            game.state.add('MainMenu', Game.MainMenu);
+            game.state.add('Level1', Game.Level1);
+                  
+            game.state.start('Boot');
+
+        };
+</script>            
+</body>
+</html>
