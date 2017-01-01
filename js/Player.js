@@ -18,6 +18,7 @@ var Player = function(game, x, y, key, hp) {
         this.weaponTime = 0;
         this.walkTime = 0;
         this.hitTime = 0;
+        this.dead = false;
         this.body.bounce.set(1);
         //add player's shadow
         playerShadow = this.game.add.image(0, 0, 'playerShadow');
@@ -35,7 +36,10 @@ var Player = function(game, x, y, key, hp) {
         attackRight.onComplete.add(this.resetFrames, this);
         attackDown.onComplete.add(this.resetFrames, this);
         attackUp.onComplete.add(this.resetFrames, this);
-
+        /* runs attack function when attackKey(spacebar) is pressed.
+        keeping this out of the update loop keeps the animation and
+        damage object locked into its state mandated parameters until 
+        the animation finishes */ 
         attackKey.onDown.add(this.attack, this);
             };
 
@@ -184,9 +188,11 @@ Player.prototype.constructor = Player;
         }
         
       }
+
+      if (this.hp <= 0) {
+        this.deathAnimation();
+      }
 };
-
-
 
 Player.prototype.resetFrames = function() {
           this.attacked = false;
@@ -236,14 +242,14 @@ Player.prototype.hitEnemy = function(player, Enemy) {
           }
           this.hitTime = this.game.time.now + 200;
       };
+
 Player.prototype.changeTint = function() {
   player.tint = 0xffffff;
-  
 };
 
 Player.prototype.attack = function() {
              if (this.facing === 2) {
-              this.state = 'attackRight';
+        this.state = 'attackRight';
         } else if (this.facing === 4) { 
         this.state = 'attackLeft';
         } else if (this.facing === 1) { 
@@ -264,8 +270,12 @@ Player.prototype.knockBack = function() {
                 } else if ((player.y) >= (this.enemy.y)) {
                   player.body.velocity.y = 200;
                 } 
-};
+            };
 
 Player.prototype.knockBackStop = function() { 
     player.body.velocity = 0; 
-};          
+};  
+
+Player.prototype.deathAnimation = function() {
+    player.dead = true;
+};        

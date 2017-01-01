@@ -13,6 +13,7 @@ Game.Preloader.prototype = {
     this.load.image('enemy', 'assets/enemy.png');
     this.load.atlas('bug', 'assets/bug.png', 'assets/bug.json');
     this.load.image('drone', 'assets/drone.png');
+    this.load.image('playerDead', 'assets/player/dead.png');
     this.load.spritesheet('explosion', 'assets/explosion.png', 100, 114);
     this.load.audio('enemy1', 'assets/sound/enemy1Hit.mp3');
     this.load.audio('enemy2', 'assets/sound/enemy2.mp3');
@@ -28,6 +29,7 @@ Game.Preloader.prototype = {
     this.load.spritesheet('heart', 'assets/heart.png', 16, 16);
     this.load.image('yen', 'assets/yen.png', 8, 12);
     this.load.spritesheet('pixel', 'assets/pixel.png', 3, 3);
+    this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         },
     create: function() {
         

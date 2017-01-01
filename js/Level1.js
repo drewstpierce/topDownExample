@@ -4,7 +4,6 @@ Game.Level1 = function(game) {};
 
 var tileset;
 var layer;
-var jumpTimer;
 var pauseScreen;
 var attacked;
 var attackKey;
@@ -12,13 +11,11 @@ var leftKey;
 var rightKey;
 var upKey;
 var downKey;
+var selectKey;
 var xx;
 var yy;
 var hp;
-var camera;
-var nonThreat;
 var cursors;
-var jumpButton;
 var initX;
 var sprite;
 var coins;
@@ -47,7 +44,7 @@ Game.Level1.prototype = {
 
     //initialize player
     player = this.game.add.existing(
-    new Player(this.game, this.game.width/2, this.game.height/2, 'player', 6)
+    new Player(this.game, this.game.width/4, this.game.height/4, 'player', 6)
     );
     //initialize enemies
     enemy1 = this.game.add.existing(
@@ -60,16 +57,7 @@ Game.Level1.prototype = {
     //set up the camera
    camera = {x:0, y:0, direction:'', isMoving:false};
     //initialize audio
-   playerSwordAudio = this.add.audio('playerSword', 0.5);
-   playerWalkAudio = this.add.audio('playerWalk', 0.5);
-   playerHitAudio = this.add.audio('playerHit', 0.5);
-   playerDieAudio = this.add.audio('playerDie', 0.5);
-   enemy1HitAudio = this.add.audio('enemy1', 0.5);
-   enemy2HitAudio = this.add.audio('enemy2', 0.5);
-   enemy1BurstAudio = this.add.audio('enemy1Burst', 0.5);
-   music = this.add.audio('music', true);
-    music.play();
-    music.loopFull();
+   this.audioInit();
 
     //create the heads up display
     this.createHUD();
@@ -81,6 +69,7 @@ Game.Level1.prototype = {
    
     setUpKeys: function () {
         
+        selectKey = this.input.keyboard.addKey(Phaser.Keyboard.ENTER);
         attackKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         leftKey = this.input.keyboard.addKey(Phaser.Keyboard.A);
         rightKey = this.input.keyboard.addKey(Phaser.Keyboard.D);
@@ -139,9 +128,9 @@ Game.Level1.prototype = {
         heartBar = this.add.group();
         heartBar.fixedToCamera = true;
         //make three hearts
-        for (var i = 0; i < 3; i++) {
+        for (var i = 1; i < 4; i++) {
             heart = heartBar.create(18 * i, 16, 'heart', i);
-           
+            heart.anchor.setTo(0.5, 0.5);
             heart.animations.add('fullGlow', [0, 1, 2, 3, 2, 1], 9, true);
             heart.animations.add('halfGlow', [4, 5, 6, 7, 6, 5], 9, true);  
         }     
@@ -149,46 +138,39 @@ Game.Level1.prototype = {
         emitter.makeParticles('pixel');
         emitter.gravity = 200;
         heartBar.children[2].addChild(emitter);  
-        emitter.x = heartBar.children[2].x;
-        emitter.y = heartBar.children[2].y;
-        yenHUD = this.add.sprite(82, 16, 'yenHUD');
-        yenHUD.anchor.setTo(0.5, 0.5);
-        yenHUD.fixedToCamera = true;  
         
 },
 
 updateHealth: function() {
 if (player.hp === 6) {
+
         heartBar.callAll('animations.play', 'animations', 'fullGlow');
         
     } else if (player.hp === 5) {
-        emitter.x = heartBar.children[2].x;
-        emitter.y = heartBar.children[2].y;
+        
         heartBar.children[2].animations.play('halfGlow');
         
     } else if (player.hp === 4) {
-        emitter.x = heartBar.children[1].x;
-        emitter.y = heartBar.children[1].y;
+        
         heartBar.children[2].kill();
         
     } else if (player.hp === 3) {
-        emitter.x = heartBar.children[1].x;
-        emitter.y = heartBar.children[1].y;
+        
         heartBar.children[1].animations.play('halfGlow');
         
     } else if (player.hp === 2) {
-        emitter.x = heartBar.children[0].x;
-        emitter.y = heartBar.children[0].y;
+        
         heartBar.children[1].kill();
         
     } else if (player.hp === 1) {
-        emitter.x = heartBar.children[0].x;
-        emitter.y = heartBar.children[0].y;
+       
         heartBar.children[0].animations.play('halfGlow');
         
     } else if (player.hp <= 0) {
-        
         heartBar.children[0].kill();
+        if (player.dead === true) {
+            this.state.start('GameOver');
+        }
         
     }
 },
@@ -216,5 +198,18 @@ if (player.hp === 6) {
     this.moveCamera();
     //HUD heart animation
     this.updateHealth();
-}
-    };
+}, 
+
+audioInit: function() {
+    playerSwordAudio = this.add.audio('playerSword', 0.5);
+    playerWalkAudio = this.add.audio('playerWalk', 0.5);
+    playerHitAudio = this.add.audio('playerHit', 0.5);
+    playerDieAudio = this.add.audio('playerDie', 0.5);
+    enemy1HitAudio = this.add.audio('enemy1', 0.5);
+    enemy2HitAudio = this.add.audio('enemy2', 0.5);
+    enemy1BurstAudio = this.add.audio('enemy1Burst', 0.5, false);
+    music = this.add.audio('music', true);
+    music.play();
+    music.loopFull();
+    }
+};

@@ -10,7 +10,8 @@ var Enemy = function(game, x, y, key, hp) {
     this.hp = hp;
     this.key = 'key';
     this.game.time.events.add(Phaser.Timer.SECOND * Math.random(0.1, 0.5), this.loadAnimations, this);
-    this.state = 'left';    
+    this.state = 'left';
+    this.burstSoundTime = 0;    
      
     };
 
@@ -59,8 +60,11 @@ Enemy.prototype.hit = function(enemy, Damage) {
 Enemy.prototype.animationEndShake = function() {
     if (this.exists) {
     this.game.camera.shake(.02, 17);
-    enemy1BurstAudio.play('', 0, 1, false);
-}
+    if (this.game.time.now > this.burstSoundTime) {
+                enemy1BurstAudio.play();
+          this.burstSoundTime = this.game.time.now + 570;
+        }
+    } 
 };
 
 Enemy.prototype.loadAnimations = function() {

@@ -5,7 +5,6 @@ var Damage = function(game, x, y, key) {
         this.anchor.setTo(0.5, 0.5);
         this.game.enableBody = true;
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
-        this.anchor.setTo(.5, .5);
         this.body.allowRotation = false;
         this.game.time.events.add(Phaser.Timer.SECOND * .09, this.destroyWeapon, this);
         this.visible = false;
