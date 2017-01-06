@@ -227,9 +227,17 @@ Player.prototype.hitEnemy = function(player, Enemy) {
           if (this.game.time.now > this.hitTime) {
               player.tint = 0xff4800;
               //make particles shoot from the heart emitters
-              if ((player.hp === 5)) {
+              if ((player.hp === 6)) {
+                  heartBar.children[2].addChild(emitter);
+                 } else if ((player.hp === 5)) {
+                  heartBar.children[1].addChild(emitter);
+                 } else if ((player.hp === 4)) {
                   heartBar.children[1].addChild(emitter);
                  } else if ((player.hp === 3)) {
+                  heartBar.children[0].addChild(emitter);
+                 } else if ((player.hp === 2)) {
+                  heartBar.children[0].addChild(emitter);
+                 } else if ((player.hp === 1)) {
                   heartBar.children[0].addChild(emitter);
                  } 
                  emitter.start(true, 2000, null, 20);  
